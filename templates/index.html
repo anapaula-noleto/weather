@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Previsão do tempo</title>
+    <style>
+        .grid-item {
+          text-align: center;
+          height: 230px;
+          border-radius:15px;
+          border: 5px solid transparent;
+          background-clip:padding-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="jumbotron text-center" style="background-color:#CFD8DC;">
+        <h3><strong> Como está o tempo? </strong></h3>
+        <p> Acompanhe o tempo nas cidades que você desejar. </p>
+    </div>
+
+<center>
+    <div class="container">
+        <form class="form-inline" action="/" method="post" autocomplete="off">
+        <input type="text" name="city"  autofocus class="form-control">
+
+        <button type="submit" class="btn btn-primary">Adicionar cidade</button>
+        <br>
+<!--        <div class="checkbox">-->
+<!--            <label><input type="checkbox" name="mycheckbox" value="humidity"> Humidade</label>-->
+<!--            <label><input type="checkbox" name="mycheckbox" value="wind_speed"> Velocidade do vento</label>-->
+<!--            <label><input type="checkbox" name="mycheckbox" value="max_temp"> Temperatura máxima </label>-->
+<!--        </div>-->
+    </form>
+        <br>
+<!--        Get the flash messages and loop over them to see what I have-->
+        {% with messages = get_flashed_messages(with_categories=true)%}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% set message_class = 'success' %}
+
+                {% if category == 'error' %}
+                    {% set message_class = 'danger' %}
+                {% endif%}
+
+                <div class="alert alert-{{message_class}}">
+                    {{message}}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+</center>
+
+
+    <div class="container">
+        <div class="row" >
+            {% for weather in weather_data %}
+            <div class="col-sm-4 bg-danger grid-item bg-info" >
+                <a href="{{ url_for('delete_city', name=weather.city) }}">
+                    <button type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </a>
+                <img class="card-img-top" src="http://openweathermap.org/img/w/{{weather.icon}}.png" alt="Image">
+                <h3> Cidade: {{weather.city}}, {{weather.country}}</h3>
+                <p>Temperatura: {{weather.temperature}} °C</p>
+                <p>Descrição: {{weather.description}}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>
